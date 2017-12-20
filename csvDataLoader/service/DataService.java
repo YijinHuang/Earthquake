@@ -27,7 +27,7 @@ public class DataService {
             while ((quakeString = reader.readLine()) != null) {
                 attrs = quakeString.split(",");
                 quakes.add(new QuakesEntity(Integer.parseInt(attrs[0]),
-                                            attrs[1],
+                                            attrs[1].replace("\"", ""),
                                             Double.parseDouble(attrs[2]),
                                             Double.parseDouble(attrs[3]),
                                             Integer.parseInt(attrs[4]),
@@ -89,13 +89,20 @@ public class DataService {
         return quakes;
     }
 
-//    public static void main(String[] args) {
-//        DataService dataService = new DataService();
-//        Date date = new Date();
-//        dataService.init();
-//        System.out.println(dataService.getAll().size());
-//        System.out.println(dataService.getByMagnitude(2.5).size());
-//        System.out.println(dataService.getByMagnitudeRange(1.0, 5.0).size());
-//        System.out.println(dataService.getByUTCDate(date));
-//    }
+    public static void main(String[] args) {
+        DataService dataService = new DataService();
+        Date from = null;
+        Date to = null;
+        try {
+            from = dataService.format.parse("2017-10-15 00:53:27.0");
+            to = dataService.format.parse("2017-10-15 06:36:20.2");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dataService.init();
+        System.out.println(dataService.getAll().size());
+        System.out.println(dataService.getByMagnitude(2.5).size());
+        System.out.println(dataService.getByMagnitudeRange(1.0, 5.0).size());
+        System.out.println(dataService.getByUTCDateRange(from, to).size());
+    }
 }

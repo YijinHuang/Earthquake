@@ -61,7 +61,7 @@ public class EarthQuakeCrawler extends Thread {
 
                 try {
                     writer.write(id + ",");
-                    writer.write(time + ",");
+                    writer.write("\"" + time + "\",");
                     writer.write(latitude + ",");
                     writer.write(longtitude + ",");
                     writer.write(depth + ",");

@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -86,13 +87,20 @@ public class DataService {
         session.close();
     }
 
-    public static void main(String[] args) {
-        Date from = new Date();
-        DataService dataService = new DataService();
-        dataService.init();
-        System.out.println(dataService.getAll().size());
-        System.out.println(dataService.getByMagnitudeRange(8, 9).size());
-        System.out.println(dataService.getByUTCDate(from));
-        dataService.close();
-    }
+//    public static void main(String[] args) {
+//        DataService dataService = new DataService();
+//        Date from = null;
+//        Date to = null;
+//        try {
+//            to = dataService.format.parse("2017-10-14 13:07:58.3");
+//            from = dataService.format.parse("2017-10-14 11:20:26.0");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        dataService.init();
+//        System.out.println(dataService.getAll().size());
+//        System.out.println(dataService.getByMagnitudeRange(8, 9).size());
+//        System.out.println(dataService.getByUTCDateRange(from, to).size());
+//        dataService.close();
+//    }
 }
