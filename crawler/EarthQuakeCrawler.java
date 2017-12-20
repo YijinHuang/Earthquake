@@ -23,7 +23,7 @@ public class EarthQuakeCrawler extends Thread {
         Element tbody;
         Elements trs;
         Elements tabev1, tabev2;
-        String time, latitude, longtitude, depth, magnitude, region, direction;
+        String id, time, latitude, longtitude, depth, magnitude, region, direction;
 
         try {
             doc = Jsoup.connect("https://www.emsc-csem.org/Earthquake/?view=" + pageNum).get();
@@ -34,7 +34,8 @@ public class EarthQuakeCrawler extends Thread {
         tbody = doc.select("#tbody").get(0);
         trs = tbody.select("tr");
         for (Element tr : trs) {
-            if (!tr.id().contains("tr")) {
+            id = tr.id();
+            if (!id.contains("tr")) {
                 tabev1 = tr.select(".tabev1");
                 tabev2 = tr.select(".tabev2");
 
@@ -59,6 +60,7 @@ public class EarthQuakeCrawler extends Thread {
                 region = tr.select(".tb_region").get(0).text();
 
                 try {
+                    writer.write(id + ",");
                     writer.write(time + ",");
                     writer.write(latitude + ",");
                     writer.write(longtitude + ",");
@@ -83,12 +85,18 @@ public class EarthQuakeCrawler extends Thread {
         try {
             File file = new File("./src/data/earthquakes.csv");
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            int pageAmount = 1000;
+            writer.write("id,UTC_date,latitude,longitude,depth,magnitude,region\n");
+            writer.flush();
+            int pageAmount = 100;
+            Thread[] threads = new Thread[pageAmount];
             for (int i = 1; i <= pageAmount; i++) {
                 Thread thread = new EarthQuakeCrawler(i, writer);
+                threads[i-1] = thread;
                 thread.start();
-                thread.join();
                 Thread.sleep(200);
+            }
+            for (Thread thread : threads) {
+                thread.join();
             }
             System.out.println("Finish");
         } catch (IOException | InterruptedException e) {

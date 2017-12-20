@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:sqlite:E:/Projects/Java/earthquake/src/earthquakes-1.sqlite</property>
+    <property name="connection.url">jdbc:sqlite:E:/Projects/Java/earthquake/src/data/earthquakes-1.sqlite</property>
       <property name="connection.driver_class">org.sqlite.JDBC</property>
       <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
       <mapping class="model.QuakesEntity"/>
