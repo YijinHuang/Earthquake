@@ -2,7 +2,8 @@
 ## content
 - The database manager and model of Java2Project with ORM framework `Hibernate`.
 - earthquake data crawler
-
+## structure
+![structure](./structure.png)
 ## Environment Configuration
 ### Hibernate
 - #### Offical way
