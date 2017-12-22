@@ -14,17 +14,21 @@ import java.util.List;
 
 //Created by Gotcha on 2017/12/11.
 public class DataService {
-    Configuration config = null;
-    SessionFactory sessionFactory = null;
-    Session session = null;
-    Transaction tx = null;
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+    private Configuration config = null;
+    private SessionFactory sessionFactory = null;
+    private Session session = null;
+    private Transaction tx = null;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
-    public void init(){
+    public void init() {
         config = new Configuration().configure("./hibernate.cfg.xml");
         sessionFactory = config.buildSessionFactory();
         session = sessionFactory.openSession();
-        tx = session.beginTransaction();
+    }
+
+    public void update() {
+        UpdateService updateService = new UpdateService(session);
+        updateService.update();
     }
 
     public QuakesEntity getById(int id) {
@@ -59,6 +63,7 @@ public class DataService {
     public List<QuakesEntity> getByUTCDateRange(Date fromDate, Date toDate) {
         return getByUTCDateRange(format.format(fromDate), format.format(toDate));
     }
+
     public List<QuakesEntity> getByMagnitude(double magnitude) {
         Query query = session.createQuery("from QuakesEntity where magnitude=?1");
         query.setParameter(1, magnitude);
@@ -87,20 +92,22 @@ public class DataService {
         session.close();
     }
 
-//    public static void main(String[] args) {
-//        DataService dataService = new DataService();
-//        Date from = null;
-//        Date to = null;
-//        try {
-//            to = dataService.format.parse("2017-10-14 13:07:58.3");
-//            from = dataService.format.parse("2017-10-14 11:20:26.0");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        dataService.init();
-//        System.out.println(dataService.getAll().size());
-//        System.out.println(dataService.getByMagnitudeRange(8, 9).size());
-//        System.out.println(dataService.getByUTCDateRange(from, to).size());
-//        dataService.close();
-//    }
+    public static void main(String[] args) {
+        DataService dataService = new DataService();
+        Date from = null;
+        Date to = null;
+        try {
+            to = dataService.format.parse("2017-10-14 13:07:58.3");
+            from = dataService.format.parse("2017-10-14 11:20:26.0");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dataService.init();
+        System.out.println(dataService.getAll().size());
+        System.out.println(dataService.getByMagnitudeRange(8, 9).size());
+        System.out.println(dataService.getByUTCDateRange(from, to).size());
+        dataService.update();
+        System.out.println(dataService.getAll().size());
+        dataService.close();
+    }
 }
