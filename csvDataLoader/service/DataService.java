@@ -2,7 +2,6 @@ package service;
 
 import model.QuakesEntity;
 
-import javax.management.Query;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //Created by Gotcha on 2017/12/20.
 public class DataService {
@@ -45,20 +45,15 @@ public class DataService {
         }
     }
 
-    public List<QuakesEntity> getByUTCDate(String dataString) {
-        return quakes.stream().filter(e -> e.getUtcDate().equals(dataString)).collect(Collectors.toList());
+    public Stream<QuakesEntity> restrictByUTCDateRange(String fromDateString, String toDateString, Stream<QuakesEntity> stream) throws ParseException {
+        return restrictByUTCDateRange(format.parse(fromDateString), format.parse(toDateString), stream);
     }
 
-    public List<QuakesEntity> getByUTCDateRange(String fromDateString, String toDateString) throws ParseException {
-        return getByUTCDateRange(format.parse(fromDateString), format.parse(toDateString));
-    }
-
-    public List<QuakesEntity> getByUTCDate(Date date) {
-        return getByUTCDate(format.format(date));
-    }
-
-    public List<QuakesEntity> getByUTCDateRange(Date fromDate, Date toDate) {
-        return quakes.stream().filter(e -> {
+    public Stream<QuakesEntity> restrictByUTCDateRange(Date fromDate, Date toDate, Stream<QuakesEntity> stream) {
+        if (stream == null) {
+            stream = quakes.stream();
+        }
+        stream = stream.filter(e -> {
             boolean statisfied = false;
             try {
                 Date date = format.parse(e.getUtcDate());
@@ -67,42 +62,52 @@ public class DataService {
                 e1.printStackTrace();
             }
             return statisfied;
-        }).collect(Collectors.toList());
+        });
+        return stream;
     }
 
-    public List<QuakesEntity> getByMagnitude(double magnitude) {
-        return quakes.stream().filter(e -> e.getMagnitude() == magnitude).collect(Collectors.toList());
-    }
-
-    public List<QuakesEntity> getByMagnitudeRange(double fromMagnitude, double toMagnitude) {
-        return quakes.stream().filter(e -> {
+    public Stream<QuakesEntity> restrictByMagnitudeRange(double fromMagnitude, double toMagnitude, Stream<QuakesEntity> stream) {
+        if (stream == null) {
+            stream = quakes.stream();
+        }
+        stream = stream.filter(e -> {
             double magnitude = e.getMagnitude();
             return magnitude >= fromMagnitude && magnitude <= toMagnitude;
-        }).collect(Collectors.toList());
+        });
+        return stream;
     }
 
-    public List<QuakesEntity> getByRegion(String region) {
-        return quakes.stream().filter(e -> e.getRegion().equals(region)).collect(Collectors.toList());
+    public Stream<QuakesEntity> restrictByRegion(String region, Stream<QuakesEntity> stream) {
+        if (stream == null) {
+            stream = quakes.stream();
+        }
+        stream = stream.filter(e -> e.getRegion().equals(region));
+        return stream;
     }
 
     public List<QuakesEntity> getAll() {
         return quakes;
     }
 
-    public static void main(String[] args) {
-        DataService dataService = new DataService();
-        Date from = null;
-        Date to = null;
-        try {
-            from = dataService.format.parse("2017-10-15 00:53:27.0");
-            to = dataService.format.parse("2017-10-15 06:36:20.2");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        dataService.init();
-        System.out.println(dataService.getAll().size());
-        System.out.println(dataService.getByMagnitude(2.5).size());
-        System.out.println(dataService.getByMagnitudeRange(1.0, 5.0).size());
-        System.out.println(dataService.getByUTCDateRange(from, to).size());
+    public List<QuakesEntity> query(Stream<QuakesEntity> stream) {
+        return stream.collect(Collectors.toList());
     }
+
+//    public static void main(String[] args) {
+//        DataService dataService = new DataService();
+//        Date from = null;
+//        Date to = null;
+//        try {
+//            from = dataService.format.parse("2017-10-15 00:53:27.0");
+//            to = dataService.format.parse("2017-10-15 06:36:20.2");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        dataService.init();
+//        System.out.println(dataService.getAll().size());
+//        System.out.println(dataService.query(dataService.restrictByMagnitudeRange(1.0, 4.0, null)).size());
+//        Stream stream = dataService.restrictByMagnitudeRange(1.0, 4.0, null);
+//        Stream stream1 = dataService.restrictByUTCDateRange(from, to, stream);
+//        System.out.println(dataService.query(stream1).size());
+//    }
 }

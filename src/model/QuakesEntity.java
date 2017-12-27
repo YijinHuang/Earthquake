@@ -1,8 +1,16 @@
 package model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.LazyToOne;
+
 import javax.persistence.*;
 
-//Created by Gotcha on 2017/12/11.
+/**
+ *  @author 黄义劲
+ *  The class to represents the earthquakes table in the sqlite database
+ */
 @Entity
 @Table(name = "quakes", schema = "main")
 public class QuakesEntity {
@@ -25,6 +33,9 @@ public class QuakesEntity {
         this.id = id;
     }
 
+    /**
+     * @return UTC Date String of earthquake in format yyyy-MM-dd HH:mm:ss.S
+     */
     @Basic
     @Column(name = "UTC_date", nullable = false)
     public String getUtcDate() {
@@ -35,6 +46,9 @@ public class QuakesEntity {
         this.utcDate = utcDate;
     }
 
+    /**
+     * @return latitude of earthquake
+     */
     @Basic
     @Column(name = "latitude", nullable = false, precision = 0)
     public double getLatitude() {
@@ -45,6 +59,9 @@ public class QuakesEntity {
         this.latitude = latitude;
     }
 
+    /**
+     * @return longtitude of earthquake
+     */
     @Basic
     @Column(name = "longitude", nullable = false, precision = 0)
     public double getLongitude() {
@@ -55,6 +72,9 @@ public class QuakesEntity {
         this.longitude = longitude;
     }
 
+    /**
+     * @return depth of earthquake
+     */
     @Basic
     @Column(name = "depth", nullable = false)
     public int getDepth() {
@@ -65,6 +85,9 @@ public class QuakesEntity {
         this.depth = depth;
     }
 
+    /**
+     * @return magnitude of earthquake
+     */
     @Basic
     @Column(name = "magnitude", nullable = false, precision = 0)
     public double getMagnitude() {
@@ -75,6 +98,9 @@ public class QuakesEntity {
         this.magnitude = magnitude;
     }
 
+    /**
+     * @return region of earthquake
+     */
     @Basic
     @Column(name = "region", nullable = true, length = 100)
     public String getRegion() {
@@ -95,6 +121,11 @@ public class QuakesEntity {
 //        this.areaId = areaId;
 //    }
 
+    /**
+     * judge if two earthquakes are the same
+     * @param o QuakesEntity
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
