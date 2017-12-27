@@ -1,6 +1,9 @@
 package model;
 
-//Created by Gotcha on 2017/12/20.
+/**
+ *  @author 黄义劲
+ *  The class to represents the earthquakes in the csv file
+ */
 public class QuakesEntity {
     private int id;
     private String utcDate;
@@ -34,6 +37,9 @@ public class QuakesEntity {
         this.id = id;
     }
 
+    /**
+     * @return UTC Date String of earthquake in format yyyy-MM-dd HH:mm:ss.S
+     */
     public String getUtcDate() {
         return utcDate;
     }
@@ -42,6 +48,9 @@ public class QuakesEntity {
         this.utcDate = utcDate;
     }
 
+    /**
+     * @return latitude of earthquake
+     */
     public double getLatitude() {
         return latitude;
     }
@@ -50,6 +59,9 @@ public class QuakesEntity {
         this.latitude = latitude;
     }
 
+    /**
+     * @return longtitude of earthquake
+     */
     public double getLongitude() {
         return longitude;
     }
@@ -58,6 +70,9 @@ public class QuakesEntity {
         this.longitude = longitude;
     }
 
+    /**
+     * @return depth of earthquake
+     */
     public int getDepth() {
         return depth;
     }
@@ -66,6 +81,9 @@ public class QuakesEntity {
         this.depth = depth;
     }
 
+    /**
+     * @return magnitude of earthquake
+     */
     public double getMagnitude() {
         return magnitude;
     }
@@ -74,6 +92,9 @@ public class QuakesEntity {
         this.magnitude = magnitude;
     }
 
+    /**
+     * @return region of earthquake
+     */
     public String getRegion() {
         return region;
     }
@@ -82,6 +103,11 @@ public class QuakesEntity {
         this.region = region;
     }
 
+    /**
+     * judge if two earthquakes are the same
+     * @param o QuakesEntity
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

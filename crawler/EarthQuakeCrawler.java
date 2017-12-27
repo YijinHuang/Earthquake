@@ -7,7 +7,9 @@ import org.jsoup.select.Elements;
 
 import java.io.*;
 
-//Created by Gotcha on 2017/12/18.
+/**
+ * the class to scrape appointed number of pages into a csv file
+ */
 public class EarthQuakeCrawler extends Thread {
     private Document doc = null;
     private BufferedWriter writer;
@@ -18,6 +20,9 @@ public class EarthQuakeCrawler extends Thread {
         this.writer = writer;
     }
 
+    /**
+     * The run function to scrape in multithreading environment
+     */
     @Override
     public void run() {
         Element tbody;
@@ -80,6 +85,7 @@ public class EarthQuakeCrawler extends Thread {
             e.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) {
         try {

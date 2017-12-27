@@ -1,10 +1,5 @@
 package model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.LazyToOne;
-
 import javax.persistence.*;
 
 /**

@@ -11,12 +11,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//Created by Gotcha on 2017/12/20.
+/**
+ * @author 黄义劲
+ * The class to query the QuakesEntities by Stream operations and provide the quried QuakesEntities for Controller
+ */
 public class DataService {
     private BufferedReader reader = null;
     private ArrayList<QuakesEntity> quakes = new ArrayList<>();
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
+    /**
+     * Get the csv file and encapsulate the earthquakes to QuakesEntities.
+     */
     public void init() {
         try {
             File file = new File("./src/data/earthquakes.csv");
@@ -45,10 +51,24 @@ public class DataService {
         }
     }
 
+    /**
+     * Add new date restriction to filter earthquakes
+     * @param fromDateString the begin date string in format yyyy-MM-dd HH:mm:ss.S
+     * @param toDateString the end date string in format yyyy-MM-dd HH:mm:ss.S
+     * @param stream if stream is null then open a new stream else filter the stream
+     * @return stream after filtering
+     */
     public Stream<QuakesEntity> restrictByUTCDateRange(String fromDateString, String toDateString, Stream<QuakesEntity> stream) throws ParseException {
         return restrictByUTCDateRange(format.parse(fromDateString), format.parse(toDateString), stream);
     }
 
+    /**
+     * Add new date restriction to filter earthquakes
+     * @param fromDate the begin date
+     * @param toDate the end date
+     * @param stream if stream is null then open a new stream else filter the stream
+     * @return stream after filtering
+     */
     public Stream<QuakesEntity> restrictByUTCDateRange(Date fromDate, Date toDate, Stream<QuakesEntity> stream) {
         if (stream == null) {
             stream = quakes.stream();
@@ -66,6 +86,13 @@ public class DataService {
         return stream;
     }
 
+    /**
+     * Add new date restriction to filter earthquakes
+     * @param fromMagnitude the lower bound magnitude
+     * @param toMagnitude the upper bound magnitude
+     * @param stream if stream is null then open a new stream else filter the stream
+     * @return stream after filtering
+     */
     public Stream<QuakesEntity> restrictByMagnitudeRange(double fromMagnitude, double toMagnitude, Stream<QuakesEntity> stream) {
         if (stream == null) {
             stream = quakes.stream();
@@ -77,6 +104,12 @@ public class DataService {
         return stream;
     }
 
+    /**
+     * Add new region restriction to filter earthquakes
+     * @param region the region of earthquake
+     * @param stream if stream is null then open a new stream else filter the stream
+     * @return stream after filtering
+     */
     public Stream<QuakesEntity> restrictByRegion(String region, Stream<QuakesEntity> stream) {
         if (stream == null) {
             stream = quakes.stream();
@@ -85,10 +118,19 @@ public class DataService {
         return stream;
     }
 
+    /**
+     * Get all earthquakes
+     * @return List of earthquakes
+     */
     public List<QuakesEntity> getAll() {
         return quakes;
     }
 
+    /**
+     * Generate List of earthquakes by stream after filtering
+     * @param stream the stream after filtering
+     * @return List of earthquakes after filtering
+     */
     public List<QuakesEntity> query(Stream<QuakesEntity> stream) {
         return stream.collect(Collectors.toList());
     }

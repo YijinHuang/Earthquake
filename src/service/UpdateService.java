@@ -11,7 +11,10 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-//Created by Gotcha on 2017/12/22.
+/**
+ *  @author 黄义劲
+ *  The class to update sqlite by crawler
+ */
 public class UpdateService{
     private final String URL_PREFIX = "https://www.emsc-csem.org/Earthquake/?view=";
 
@@ -20,12 +23,19 @@ public class UpdateService{
     private Session session;
     private int count = 0;
 
+    /**
+     * fetch a session and get the lastest earthquake id
+     * @param session the session from DataService
+     */
     public UpdateService(Session session) {
         this.session = session;
         Query query = session.createQuery("select max(quake.id) from QuakesEntity as quake");
         this.latestId = (int) query.list().get(0);
     }
 
+    /**
+     * Get the pages which contain new earthquake need to update and scrape these pages
+     */
     public void update() {
         int i = 0;
         count = 0;
@@ -42,6 +52,11 @@ public class UpdateService{
         }
     }
 
+    /**
+     * Check if this page contains new earthquake
+     * @param pageNum the number of page
+     * @return if need to scrape
+     */
     private boolean check(int pageNum) {
         Document doc;
         Element tbody;
@@ -68,6 +83,10 @@ public class UpdateService{
         return true;
     }
 
+    /**
+     * scrape the earthquakes in this page and update to the sqlite database
+     * @param doc the content of page
+     */
     private void crawler(Document doc) {
         Element tbody;
         Elements trs;
